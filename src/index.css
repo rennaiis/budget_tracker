@@ -1,5 +1,48 @@
-:root {
+*{
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+li{
+  list-style: none;
+}
+body{
+  background: radial-gradient(circle at 15% 99%, rgba(81, 52, 197, 0.353) 0%, rgb(25, 25, 27) 80%), #282828;
+  background-attachment: fixed;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+.app{
+  width: 100%;
+  max-width: 500px;
+  min-width: 320px;
+}
+
+.container{
+  background-color: rgba(144, 143, 167, 0.589);
+  margin-top: 1rem;
+  width: 100%;
+  border-radius:15px;
+  padding: 20px;
+}
+
+.list-item{
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.balance{
+  display: flex;
+}
+
+.balance-buttons{
+  display: flex;
 }

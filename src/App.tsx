@@ -16,8 +16,10 @@ function App() {
 function Balance(){
   return(
     <div className='container'>
-      <h3 className='balance-head'> Balance</h3>
-      <p className='balance-sum'>800$</p>
+      <div className='balance'>
+        <h3 className='balance-head'> Balance</h3>
+        <p className='balance-sum'>800$</p>
+      </div>
       <div className='balance-buttons'>
         <button>Income</button>
         <button>Outcome</button>
