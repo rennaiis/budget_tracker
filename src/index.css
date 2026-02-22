@@ -1,48 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 *{
    margin: 0;
    padding: 0;
    box-sizing: border-box;
 }
+
+html{
+  font-size: 62.5%;
+}
+:root{
+  --back-1: rgba(81, 52, 197, 0.353);
+  --back-2: rgb(25, 25, 27);
+  --back-3: rgba(29, 21, 58, 0.353);
+  --back-4: rgb(40, 40, 45);
+  --main-text: rgba(255, 255, 255, 0.687);
+  background: radial-gradient(circle at 15% 99%, var(--back-1) 0%, var(--back-2) 80%), #282828;
+  color-scheme: light dark;
+  font-family: 'Source Sans 3';
+  font-weight: 500;
+  color: var(--main-text);
+  display: flex;                           
+  padding: 19px;
+  gap: 1rem;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  font-size: clamp(1.8rem, 1.5rem + 0.5vw, 2rem);
+}
+
+h1{
+  font-family: 'Montserrat', sans-serif;
+}
+h2{
+  font-family: 'Montserrat', sans-serif;
+}
 li{
   list-style: none;
 }
-body{
-  background: radial-gradient(circle at 15% 99%, rgba(81, 52, 197, 0.353) 0%, rgb(25, 25, 27) 80%), #282828;
-  background-attachment: fixed;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  font-family: 'Montserrat', sans-serif;
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-}
-.app{
-  width: 100%;
-  max-width: 500px;
-  min-width: 320px;
+button{
+  background: linear-gradient(to right, var(--back-3),var(--back-4));
+  padding: 6px;
+  border-radius: 10px;
+  border: 0;
+  font-family: 'Source Sans 3';
+  font-size: 0.5rem;
+  font-weight: 700;
 }
 
+button:hover{
+  background-color: var(--back-4)
+}
+
+body{
+  width: 100%;
+  max-width: 500px;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.inline{
+  display: flex;
+  gap: 10px;
+}
 .container{
-  background-color: rgba(144, 143, 167, 0.589);
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(144, 143, 167, 0.434);
   margin-top: 1rem;
   width: 100%;
   border-radius:15px;
   padding: 20px;
+  gap: 5px;
 }
 
+.balance-sum{
+  font-size: clamp(1rem, 1rem + 0.01vw, 2rem)
+}
+input[type='text']{
+  width: 100%;
+}
+input{
+  font-size: 20px;
+  min-width: 0px;
+}
 .list-item{
   display: flex;
   justify-content: space-between;
-
+  gap: 1rem;
 }
 
-.balance{
+.sides{
   display: flex;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .balance-buttons{
   display: flex;
+  gap: 1rem;
 }
+
+.form-header{
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.categories-list{
+  display: flex;
+  gap: 1rem;
+}
+
+.form{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+

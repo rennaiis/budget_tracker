@@ -4,23 +4,23 @@ const income_categories: string[] = ['salary','bonus', 'freelance', 'scholarship
 
 function App() {
   return (
-    <div className='app'>
+    <>
       <h1>My budget</h1>
       <Balance/>
       <List/>
       <List/>
-    </div>
+    </>
   )
 }
 
 function Balance(){
   return(
     <div className='container'>
-      <div className='balance'>
+      <div className='sides'>
         <h3 className='balance-head'> Balance</h3>
         <p className='balance-sum'>800$</p>
       </div>
-      <div className='balance-buttons'>
+      <div className='inline'>
         <button>Income</button>
         <button>Outcome</button>
       </div>
@@ -32,18 +32,35 @@ function Balance(){
 function Form(){
   return(
     <>
-      <h3>Add new item</h3>
+    <div className='form-header'>
+      <h4>Add new item</h4>
       <p>{'\u2716'}</p>
-      <form className='form'action="">
-        <input type="date" value={''} required />
-        <input type='number' value={''} required/>
-        <input type="text" value={''} required/>
-        <ul>
+    </div>
+      
+      <form className='form' action="">
+        <div className='sides'>
+          <label htmlFor='form-date'>Date:</label>
+          <input type="date" value={''} id='form-date' required />
+        </div>
+        <div className='sides'>
+          <label htmlFor='form-sum'>Summ:</label>
+          <input type='number' value={''} id='form-sum' required/>
+        </div>
+        <div>
+          <label htmlFor='form-descr'>Description:</label>
+          <input type="text" id='form-descr' value={''} required/>
+        </div>
+        <ul className='sides'>
           <li className='category'>
-            <label htmlFor="food"><span className='calegory-img'><img src="" alt="1" /><span>name</span></span></label>
+            <input type="radio" id='c1' name='category'/>
+            <label htmlFor="c1"><span className='calegory-img'><img src="" alt="1" /><span>name</span></span></label>
+          </li>
+           <li className='category'>
+            <input type="radio" id='c2' name='category'/>
+            <label htmlFor="c2"><span className='calegory-img'><img src="" alt="1" /><span>name</span></span></label>
           </li>
         </ul>
-        <input type="button" />
+        <button>Add</button>
       </form>
     </>
   )
@@ -67,8 +84,8 @@ function ListItem(){
 function List(){
   return(
     <div className='container'>
-      <h2>Incomes/Outcomes</h2>
-      <div className='sort-controls'>
+      <h3>Incomes/Outcomes</h3>
+      <div className='inline'>
         <button>By date</button>
         <button>By category</button>
       </div>
