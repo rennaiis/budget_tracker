@@ -1,6 +1,11 @@
 import { useState } from 'react'
-const outcome_categories: string[] = ['housing','connectivity', 'bills', 'food', 'health','transport','clothing', 'entertainment', 'subscriptions'] 
-const income_categories: string[] = ['salary','bonus', 'freelance', 'scholarship', 'rental','Dividends','Selling'] 
+
+type priority = 'essentional'|'lifestyle'|'extra'
+const essential_categories: string[] = ['housing', 'bills', 'groceries', 'transport', 'health'];
+const lifestyle_categories: string[] = ['dining_out', 'shopping', 'entertainment', 'self_care', 'travel'];
+const extra_categories: string[] = ['education', 'subscriptions', 'gifts', 'other'];
+
+const income_categories: string[] = ['salary','bonus', 'freelance', 'scholarship', 'rental','Dividends','Selling']
 
 function App() {
   return (
