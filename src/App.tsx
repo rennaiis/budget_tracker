@@ -1,12 +1,81 @@
 import { useState } from 'react'
 
-type priority = 'essentional'|'lifestyle'|'extra'
-const essential_categories: string[] = ['housing', 'bills', 'groceries', 'transport', 'health'];
-const lifestyle_categories: string[] = ['dining_out', 'shopping', 'entertainment', 'self_care', 'travel'];
-const extra_categories: string[] = ['education', 'subscriptions', 'gifts', 'other'];
-
-const income_categories: string[] = ['salary','bonus', 'freelance', 'scholarship', 'rental','Dividends','Selling']
-
+type priority = 'essentional'|'lifestyle'|'extra'|'income'
+interface Category{
+  image: string;
+  priority: priority;
+  name: string
+}
+const categories: Category[] = [
+  { image: 'bills.png',
+    priority: 'essentional',
+    name: 'bills'
+  },
+  { image: 'grocery.png',
+    priority: 'essentional',
+    name: 'grocery'
+  },
+  { image: 'health.png',
+    priority: 'essentional',
+    name: 'health'
+  },
+  { image: 'housing.png',
+    priority: 'essentional',
+    name: 'housing'
+  },
+  { image: 'transport.png',
+    priority: 'essentional',
+    name: 'transport'
+  },
+  { image: 'self-care.png',
+    priority: 'lifestyle',
+    name: 'self-care'
+  },
+  { image: 'shopping.png',
+    priority: 'lifestyle',
+    name: 'shopping'
+  },
+  { image: 'going-out.png',
+    priority: 'lifestyle',
+    name: 'going-out'
+  },
+  { image: 'travel',
+    priority: 'lifestyle',
+    name: 'travel'
+  },
+  { image: 'other.png',
+    priority: 'extra',
+    name: 'other'
+  },
+  { image: 'subscriptions.png',
+    priority: 'extra',
+    name: 'subscriptions'
+  },
+  { image: 'education.png',
+    priority: 'extra',
+    name: 'education'
+  },
+  { image: 'gifts.png',
+    priority: 'extra',
+    name: 'gifts'
+  },
+  { image: 'salary.png',
+    priority: 'income',
+    name: 'salary'
+  },
+  { image: 'freelance.png',
+    priority: 'income',
+    name: 'freelance'
+  },
+  { image: 'scholarship.png',
+    priority: 'income',
+    name: 'scholarship'
+  },
+  { image: 'other.png',
+    priority: 'income',
+    name: 'other'
+  }
+]
 function App() {
   return (
     <>
@@ -55,14 +124,13 @@ function Form(){
           <label htmlFor='form-descr'>Description:</label>
           <input type="text" id='form-descr' value={''} required/>
         </div>
-        <ul className='sides'>
-          <li className='category'>
-            <input type="radio" id='c1' name='category'/>
-            <label htmlFor="c1"><span className='calegory-img'><img src="" alt="1" /><span>name</span></span></label>
-          </li>
-           <li className='category'>
-            <input type="radio" id='c2' name='category'/>
-            <label htmlFor="c2"><span className='calegory-img'><img src="" alt="1" /><span>name</span></span></label>
+        <ul className='category-list'>
+          <li>
+            <input type="radio" id='bills' name='category'/>
+            <label htmlFor="bills" className='category-image'>
+                <img src="bills.png" alt="1"/>
+                <p>name</p>
+            </label>
           </li>
         </ul>
         <button>Add</button>

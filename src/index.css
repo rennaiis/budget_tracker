@@ -27,9 +27,15 @@ html{
   align-items: center;
   font-size: clamp(1.8rem, 1.5rem + 0.5vw, 2rem);
 }
-
+body{
+  width: 100%;
+  max-width: 500px;
+  flex-shrink: 0;
+  font-size: 20px;
+}
 h1{
   font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2rem, 2rem+0.2wv, 4rem);
 }
 h2{
   font-family: 'Montserrat', sans-serif;
@@ -51,16 +57,14 @@ button:hover{
   background-color: var(--back-4)
 }
 
-body{
-  width: 100%;
-  max-width: 500px;
-  flex-shrink: 0;
-  font-size: 20px;
-}
-
 .inline{
   display: flex;
   gap: 10px;
+}
+.sides{
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
 }
 .container{
   display: flex;
@@ -76,37 +80,7 @@ body{
 .balance-sum{
   font-size: clamp(1rem, 1rem + 0.01vw, 2rem)
 }
-input[type='text']{
-  width: 100%;
-}
-input{
-  font-size: 20px;
-  min-width: 0px;
-}
-.list-item{
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.sides{
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
 .balance-buttons{
-  display: flex;
-  gap: 1rem;
-}
-
-.form-header{
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.categories-list{
   display: flex;
   gap: 1rem;
 }
@@ -116,4 +90,67 @@ input{
   flex-direction: column;
   gap: 5px;
 }
+.form-header{
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
 
+input[type='text']{
+  width: 100%;
+}
+input{
+  font-size: 20px;
+  min-width: 0px;
+}
+input[type='radio']{
+  display: none;
+}
+
+.category-list{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.category-image{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+}
+.category-image p{
+  opacity: 0.5;
+  font-size: 14px;
+  color: white;
+}
+
+.category-image:hover{
+  p{
+    opacity: 1;
+  }
+  img{
+    filter: brightness(50%);
+  }
+}
+input[type="radio"]:checked + .category-image img {
+  border: 2px solid rgb(255, 255, 255);  
+}
+.category-image img{
+  width:40px;
+  height: auto;
+  border-radius: 50%
+}
+.category{
+  display: flex;
+  align-items:center;
+  align-content: center;
+  justify-content: center;
+}
+
+.list-item{
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.list-item-button{
+  background-color: none;
+}
