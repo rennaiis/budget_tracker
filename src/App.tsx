@@ -1,7 +1,13 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 type priority = 'essentional'|'lifestyle'|'extra'|'income'
-interface Category{
+interface IRecord{
+  date: Date;
+  sum: number;
+  note: string;
+  category: ICategory
+}
+interface ICategory{
   image: string;
   priority: priority;
   name: string
@@ -11,13 +17,16 @@ interface IformStatus {
   openOutcomeForm: boolean;
 }
 interface CategoryProps{
-  catObj: Category
+  catObj: ICategory;
+  selectCategory: (category: ICategory)=>void
 }
 interface FormManagementProps{
   formStatus: IformStatus;
-  setFormStatus: (val: IformStatus)=>void
+  setFormStatus: (val: IformStatus)=>void;
+  addOutcome: (val: IRecord)=>void;
+  addIncome: (val: IRecord)=>void;
 }
-const outcomeCategories: Category[] = [
+const outcomeCategories: ICategory[] = [
   { image: 'bills.png',
     priority: 'essentional',
     name: 'bills'
@@ -79,7 +88,7 @@ const outcomeCategories: Category[] = [
     name: 'hobby'
   }
 ]
-const incomeCategories: Category[] = [
+const incomeCategories: ICategory[] = [
   { image: 'salary.png',
     priority: 'income',
     name: 'salary'
@@ -94,7 +103,7 @@ const incomeCategories: Category[] = [
   },
   { image: 'business.png',
     priority: 'income',
-    name: 'scholarship'
+    name: 'business'
   },
   { image: 'other-i.png',
     priority: 'income',
@@ -103,21 +112,30 @@ const incomeCategories: Category[] = [
 ]
 
 function App() {
+  const [outcomes, setOutcomes] = useState<IRecord[]>([])
+  const [incomes, setIncomes] = useState<IRecord[]>([])
   const[openForm, setOpenForm] = useState({
     openIncomeForm: false,
     openOutcomeForm: false
   })
+  
+  function addIncome(record: IRecord){
+    setIncomes([...incomes, {...record}]);
+  }
+  function addOutcome(record: IRecord){
+    setOutcomes([...outcomes, {...record}]);
+  }
   return (
     <>
       <h1>My budget</h1>
-      <Balance formStatus={openForm} setFormStatus={setOpenForm}/>
+      <Balance formStatus={openForm} setFormStatus={setOpenForm} addIncome={addIncome} addOutcome={addOutcome}/>
       <List/>
       <List/>
     </>
   )
 }
 
-function Balance({formStatus, setFormStatus}: FormManagementProps){
+function Balance({formStatus, setFormStatus, addIncome, addOutcome}: FormManagementProps){
   return(
     <div className='container'>
       <div className='sides'>
@@ -128,37 +146,62 @@ function Balance({formStatus, setFormStatus}: FormManagementProps){
         <button onClick={()=>setFormStatus({openIncomeForm: true, openOutcomeForm: false})}>Income</button>
         <button onClick={()=>setFormStatus({openIncomeForm: false, openOutcomeForm: true})}>Outcome</button>
       </div>
-      {(formStatus.openIncomeForm || formStatus.openOutcomeForm)&& <Form formStatus={formStatus} setFormStatus={setFormStatus}/>}
+      {(formStatus.openIncomeForm || formStatus.openOutcomeForm)&& <Form formStatus={formStatus} setFormStatus={setFormStatus} addIncome={addIncome} addOutcome={addOutcome}/>}
     </div>
   )
 }
 
-function Form({formStatus, setFormStatus}: FormManagementProps){
+function Form({formStatus, setFormStatus, addIncome, addOutcome}: FormManagementProps){
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0])
+  const [sum, setSum] = useState(0)
+  const[note, setNote] = useState('')
+  const initionalCategory: ICategory = {image: '', name: '', priority: 'essentional'}
+  const[category, setCategory] = useState(initionalCategory)
+
+  function handleSubmit(e: React.SubmitEvent){
+    e.preventDefault();
+    const dateObj: Date = new Date(date)
+    const rec: IRecord = {date: dateObj, category: category, note: note, sum: sum}
+    if (rec.category.priority == 'income'){
+      addIncome(rec)
+      setNote('')
+      setDate(new Date().toISOString().split('T')[0])
+      setSum(0)
+    }else{
+      addOutcome(rec)
+    }
+  }
   return(
     <>
     <div className='form-header'>
       <h4>Add new item</h4>
       <p onClick={()=>setFormStatus({openIncomeForm: false, openOutcomeForm: false})} className='cross'>{'\u2716'}</p>
     </div>  
-      <form className='form' action="">
+      <form className='form' action="" onSubmit = {handleSubmit}>
         <div className='sides'>
           <label htmlFor='form-date'>Date:</label>
-          <input type="date" id='form-date' required />
+          <input type="date" id='form-date' required 
+          value={date}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setDate(e.target.value)
+          }/>
         </div>
         <div className='sides'>
           <label htmlFor='form-sum'>Summ:</label>
-          <input type='number' id='form-sum' required/>
+          <input type='number' id='form-sum' required
+          value={sum}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setSum(Number(e.target.value))}/>
         </div>
         <div>
-          <label htmlFor='form-descr'>Description:</label>
-          <input type="text" id='form-descr' required/>
+          <label htmlFor='form-note'>Note:</label>
+          <input type="text" id='form-note' required
+          onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setNote(e.target.value)}/>
         </div>
         <ul className='category-list'>
           {(formStatus.openOutcomeForm)? 
-            outcomeCategories.map(item => <CategoryButton catObj = {item}/> ):
+            outcomeCategories.map(item => <CategoryButton catObj = {item} selectCategory={setCategory}/> ):
             <></>}
           {(formStatus.openIncomeForm)? 
-            incomeCategories.map(item => <CategoryButton catObj = {item}/> ):
+            incomeCategories.map(item => <CategoryButton catObj = {item} selectCategory={setCategory}/> ):
             <></>}
         </ul>
         <button>Add</button>
@@ -167,10 +210,12 @@ function Form({formStatus, setFormStatus}: FormManagementProps){
 
   )
 }
-function CategoryButton({catObj}: CategoryProps){
+function CategoryButton({catObj, selectCategory}: CategoryProps){
   return(
     <li>
-      <input type="radio" id={catObj.name} name='category'/>
+      <input type="radio" id={catObj.name} name='category'
+        onChange={()=>selectCategory(catObj)}
+      />
       <label htmlFor={catObj.name} className='category-image'>
           <img src={catObj.image} alt="1"/>
           <p>{catObj.name}</p>
