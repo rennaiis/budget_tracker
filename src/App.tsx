@@ -6,8 +6,16 @@ interface Category{
   priority: priority;
   name: string
 }
+interface IformStatus {
+  openIncomeForm: boolean;
+  openOutcomeForm: boolean;
+}
 interface CategoryProps{
   catObj: Category
+}
+interface FormManagementProps{
+  formStatus: IformStatus;
+  setFormStatus: (val: IformStatus)=>void
 }
 const outcomeCategories: Category[] = [
   { image: 'bills.png',
@@ -66,6 +74,10 @@ const outcomeCategories: Category[] = [
     priority: 'extra',
     name: 'gifts'
   },
+  { image: 'hobby.png',
+    priority: 'extra',
+    name: 'hobby'
+  }
 ]
 const incomeCategories: Category[] = [
   { image: 'salary.png',
@@ -80,24 +92,32 @@ const incomeCategories: Category[] = [
     priority: 'income',
     name: 'scholarship'
   },
-  { image: 'other.png',
+  { image: 'business.png',
+    priority: 'income',
+    name: 'scholarship'
+  },
+  { image: 'other-i.png',
     priority: 'income',
     name: 'other'
   }
 ]
 
 function App() {
+  const[openForm, setOpenForm] = useState({
+    openIncomeForm: false,
+    openOutcomeForm: false
+  })
   return (
     <>
       <h1>My budget</h1>
-      <Balance/>
+      <Balance formStatus={openForm} setFormStatus={setOpenForm}/>
       <List/>
       <List/>
     </>
   )
 }
 
-function Balance(){
+function Balance({formStatus, setFormStatus}: FormManagementProps){
   return(
     <div className='container'>
       <div className='sides'>
@@ -105,22 +125,21 @@ function Balance(){
         <p className='balance-sum'>800$</p>
       </div>
       <div className='inline'>
-        <button>Income</button>
-        <button>Outcome</button>
+        <button onClick={()=>setFormStatus({openIncomeForm: true, openOutcomeForm: false})}>Income</button>
+        <button onClick={()=>setFormStatus({openIncomeForm: false, openOutcomeForm: true})}>Outcome</button>
       </div>
-      <Form/>
+      {(formStatus.openIncomeForm || formStatus.openOutcomeForm)&& <Form formStatus={formStatus} setFormStatus={setFormStatus}/>}
     </div>
   )
 }
 
-function Form(){
+function Form({formStatus, setFormStatus}: FormManagementProps){
   return(
     <>
     <div className='form-header'>
       <h4>Add new item</h4>
-      <p>{'\u2716'}</p>
-    </div>
-      
+      <p onClick={()=>setFormStatus({openIncomeForm: false, openOutcomeForm: false})} className='cross'>{'\u2716'}</p>
+    </div>  
       <form className='form' action="">
         <div className='sides'>
           <label htmlFor='form-date'>Date:</label>
@@ -135,11 +154,17 @@ function Form(){
           <input type="text" id='form-descr' required/>
         </div>
         <ul className='category-list'>
-          {outcomeCategories.map(item => <CategoryButton catObj = {item}/> )}
+          {(formStatus.openOutcomeForm)? 
+            outcomeCategories.map(item => <CategoryButton catObj = {item}/> ):
+            <></>}
+          {(formStatus.openIncomeForm)? 
+            incomeCategories.map(item => <CategoryButton catObj = {item}/> ):
+            <></>}
         </ul>
         <button>Add</button>
       </form>
     </>
+
   )
 }
 function CategoryButton({catObj}: CategoryProps){

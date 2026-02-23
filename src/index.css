@@ -8,6 +8,9 @@
 html{
   font-size: 62.5%;
 }
+.cross:hover{
+  color: var(--back-4)
+}
 :root{
   --back-1: rgba(81, 52, 197, 0.353);
   --back-2: rgb(25, 25, 27);
@@ -110,6 +113,8 @@ input[type='radio']{
 .category-list{
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .category-image{
   display: flex;
