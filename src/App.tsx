@@ -241,8 +241,8 @@ function ListItem({ListItemObj}: ListItemProps){
       </div>
       <h3>{ListItemObj.sum}$</h3>
       <div className='list-item-buttons'>
-        <button>{"\u29c9"}</button>
-        <button>{'\u2716'}</button>
+        <span>{"\u29c9"}</span>
+        <span>{'\u2716'}</span>
       </div>
     </li>
   )

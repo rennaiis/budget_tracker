@@ -49,7 +49,7 @@ li{
 button{
   background: linear-gradient(to right, var(--back-3),var(--back-4));
   padding: 6px;
-  border-radius: 10px;
+  border-radius: 5px;
   border: 0;
   font-family: 'Source Sans 3';
   font-size: 0.5rem;
@@ -75,7 +75,7 @@ button:hover{
   background-color: rgba(144, 143, 167, 0.434);
   margin-top: 1rem;
   width: 100%;
-  border-radius:15px;
+  border-radius:10px;
   padding: 20px;
   gap: 5px;
 }
@@ -105,6 +105,10 @@ input[type='text']{
 input{
   font-size: 20px;
   min-width: 0px;
+  border-radius: 5px;
+  padding: 7px;
+  border: none;
+  outline: none;
 }
 input[type='radio']{
   display: none;
@@ -116,19 +120,19 @@ input[type='radio']{
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.category-image{
+.category{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items:center;
 }
-.category-image p{
+.category p{
   opacity: 0.5;
   font-size: 14px;
   color: white;
 }
 
-.category-image:hover{
+.category:hover{
   p{
     opacity: 1;
   }
@@ -136,22 +140,16 @@ input[type='radio']{
     filter: brightness(80%);
   }
 }
-input[type="radio"]:checked + .category-image img {
+input[type="radio"]:checked + .category img {
   border: 2px solid rgb(255, 255, 255);  
 }
-input[type="radio"]:checked + .category-image p {
+input[type="radio"]:checked + .category p {
   opacity: 1; 
 }
-.category-image img{
+.category-image{
   width:40px;
-  height: auto;
+  height: 40px;
   border-radius: 50%
-}
-.category{
-  display: flex;
-  align-items:center;
-  align-content: center;
-  justify-content: center;
 }
 
 .list-item{
@@ -159,6 +157,32 @@ input[type="radio"]:checked + .category-image p {
   justify-content: space-between;
   gap: 1rem;
 }
-.list-item-button{
-  background-color: none;
+
+.list-items{
+  display: flex;
+  flex-direction: column;
+  gap: 5px
+}
+.list-item-buttons{
+  display: flex;
+  gap: 10px;
+  
+}
+.list-item-buttons span{
+  font-weight: 700;
+}
+.list-item-buttons span:hover{
+  color: var(--back-4)
+}
+
+@media (max-width: 497px) {
+  .category-image{
+    width:30px;
+    height: 30px;
+    border-radius: 50%
+}
+  .category p{
+    font-weight: 300;
+    font-size: 10px;
+  }
 }
