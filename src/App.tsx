@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 type priority = 'essentional'|'lifestyle'|'extra'|'income'
+type typeOfRecord = 'Incomes' | 'Outcomes'
 interface IRecord{
   date: Date;
   sum: number;
@@ -25,6 +26,13 @@ interface FormManagementProps{
   setFormStatus: (val: IformStatus)=>void;
   addOutcome: (val: IRecord)=>void;
   addIncome: (val: IRecord)=>void;
+}
+interface ListProps{
+  type: typeOfRecord;
+  records: IRecord[]
+}
+interface ListItemProps{
+  ListItemObj: IRecord
 }
 const outcomeCategories: ICategory[] = [
   { image: 'bills.png',
@@ -129,8 +137,8 @@ function App() {
     <>
       <h1>My budget</h1>
       <Balance formStatus={openForm} setFormStatus={setOpenForm} addIncome={addIncome} addOutcome={addOutcome}/>
-      <List/>
-      <List/>
+      <List type='Outcomes' records={outcomes}/>
+      <List type='Incomes' records={incomes}/>
     </>
   )
 }
@@ -216,21 +224,22 @@ function CategoryButton({catObj, selectCategory}: CategoryProps){
       <input type="radio" id={catObj.name} name='category'
         onChange={()=>selectCategory(catObj)}
       />
-      <label htmlFor={catObj.name} className='category-image'>
-          <img src={catObj.image} alt="1"/>
+      <label htmlFor={catObj.name} className='category'>
+          <img className='category-image' src={catObj.image} alt="1"/>
           <p>{catObj.name}</p>
       </label>
     </li>
   )
 }
-function ListItem(){
+function ListItem({ListItemObj}: ListItemProps){
   return(
     <li className='list-item'>
-      <img className="category" src="" alt="category" />
+      <img className="category-image" src={ListItemObj.category.image} alt="category" />
       <div>
-        <h6 className="description">Description</h6>
-        <p className='date'>Date</p>
+        <h6 className="note">{ListItemObj.note}</h6>
+        <p className='date'>{ListItemObj.date.toISOString().split('T')[0]}</p>
       </div>
+      <h3>{ListItemObj.sum}$</h3>
       <div className='list-item-buttons'>
         <button>{"\u29c9"}</button>
         <button>{'\u2716'}</button>
@@ -238,18 +247,16 @@ function ListItem(){
     </li>
   )
 }
-function List(){
+function List({type, records}: ListProps){
   return(
     <div className='container'>
-      <h3>Incomes/Outcomes</h3>
+      <h3>{type}</h3>
       <div className='inline'>
         <button>By date</button>
         <button>By category</button>
       </div>
       <ul className='list-items'>
-        <ListItem/>
-        <ListItem/>
-        <ListItem/>
+        {records.map(item => <ListItem ListItemObj={item}/>)}
       </ul>
       <div className='diagramm'>Diagramm</div>
     </div>
