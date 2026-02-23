@@ -27,6 +27,13 @@ interface FormManagementProps{
   addOutcome: (val: IRecord)=>void;
   addIncome: (val: IRecord)=>void;
 }
+interface BalanceProps{
+  balance: number;
+  formStatus: IformStatus;
+  setFormStatus: (val: IformStatus)=>void;
+  addOutcome: (val: IRecord)=>void;
+  addIncome: (val: IRecord)=>void;
+}
 interface ListProps{
   type: typeOfRecord;
   records: IRecord[]
@@ -120,6 +127,7 @@ const incomeCategories: ICategory[] = [
 ]
 
 function App() {
+  const[balance, setBalance]=useState(0)
   const [outcomes, setOutcomes] = useState<IRecord[]>([])
   const [incomes, setIncomes] = useState<IRecord[]>([])
   const[openForm, setOpenForm] = useState({
@@ -127,28 +135,36 @@ function App() {
     openOutcomeForm: false
   })
   
+  function refreshBalance(){
+    const allIncome: number = incomes.reduce((acc, item)=> acc+item.sum, 0)
+    const allOutcome: number = outcomes.reduce((acc, item)=>acc+item.sum, 0)
+    setBalance(()=>(allIncome - allOutcome))
+  }
   function addIncome(record: IRecord){
     setIncomes([...incomes, {...record}]);
+    refreshBalance()
+    
   }
   function addOutcome(record: IRecord){
     setOutcomes([...outcomes, {...record}]);
+    refreshBalance()
   }
   return (
     <>
       <h1>My budget</h1>
-      <Balance formStatus={openForm} setFormStatus={setOpenForm} addIncome={addIncome} addOutcome={addOutcome}/>
+      <Balance formStatus={openForm} setFormStatus={setOpenForm} addIncome={addIncome} addOutcome={addOutcome} balance={balance}/>
       <List type='Outcomes' records={outcomes}/>
       <List type='Incomes' records={incomes}/>
     </>
   )
 }
 
-function Balance({formStatus, setFormStatus, addIncome, addOutcome}: FormManagementProps){
+function Balance({formStatus, setFormStatus, addIncome, addOutcome, balance}: BalanceProps){
   return(
     <div className='container'>
       <div className='sides'>
         <h3 className='balance-head'> Balance</h3>
-        <p className='balance-sum'>800$</p>
+        <p className='balance-sum'>{balance}$</p>
       </div>
       <div className='inline'>
         <button onClick={()=>setFormStatus({openIncomeForm: true, openOutcomeForm: false})}>Income</button>
