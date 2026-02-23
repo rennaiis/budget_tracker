@@ -6,7 +6,10 @@ interface Category{
   priority: priority;
   name: string
 }
-const categories: Category[] = [
+interface CategoryProps{
+  catObj: Category
+}
+const outcomeCategories: Category[] = [
   { image: 'bills.png',
     priority: 'essentional',
     name: 'bills'
@@ -39,9 +42,13 @@ const categories: Category[] = [
     priority: 'lifestyle',
     name: 'going-out'
   },
-  { image: 'travel',
+  { image: 'travel.png',
     priority: 'lifestyle',
     name: 'travel'
+  },
+  { image: 'entertainment.png',
+    priority: 'lifestyle',
+    name: 'entertainment'
   },
   { image: 'other.png',
     priority: 'extra',
@@ -59,6 +66,8 @@ const categories: Category[] = [
     priority: 'extra',
     name: 'gifts'
   },
+]
+const incomeCategories: Category[] = [
   { image: 'salary.png',
     priority: 'income',
     name: 'salary'
@@ -76,6 +85,7 @@ const categories: Category[] = [
     name: 'other'
   }
 ]
+
 function App() {
   return (
     <>
@@ -114,31 +124,35 @@ function Form(){
       <form className='form' action="">
         <div className='sides'>
           <label htmlFor='form-date'>Date:</label>
-          <input type="date" value={''} id='form-date' required />
+          <input type="date" id='form-date' required />
         </div>
         <div className='sides'>
           <label htmlFor='form-sum'>Summ:</label>
-          <input type='number' value={''} id='form-sum' required/>
+          <input type='number' id='form-sum' required/>
         </div>
         <div>
           <label htmlFor='form-descr'>Description:</label>
-          <input type="text" id='form-descr' value={''} required/>
+          <input type="text" id='form-descr' required/>
         </div>
         <ul className='category-list'>
-          <li>
-            <input type="radio" id='bills' name='category'/>
-            <label htmlFor="bills" className='category-image'>
-                <img src="bills.png" alt="1"/>
-                <p>name</p>
-            </label>
-          </li>
+          {outcomeCategories.map(item => <CategoryButton catObj = {item}/> )}
         </ul>
         <button>Add</button>
       </form>
     </>
   )
 }
-
+function CategoryButton({catObj}: CategoryProps){
+  return(
+    <li>
+      <input type="radio" id={catObj.name} name='category'/>
+      <label htmlFor={catObj.name} className='category-image'>
+          <img src={catObj.image} alt="1"/>
+          <p>{catObj.name}</p>
+      </label>
+    </li>
+  )
+}
 function ListItem(){
   return(
     <li className='list-item'>
