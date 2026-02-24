@@ -27,7 +27,6 @@ interface ChartProps{
   records: IRecord[];
   type: typeOfRecord;
 }
-
 interface CategoryProps{
   catObj: ICategory;
   selectCategory: (category: ICategory)=>void
@@ -144,53 +143,8 @@ const incomeCategories: ICategory[] = [
   }
 ]
 
-function Chart({records, type}: ChartProps){
-  let colors: string[] =[];
-  let data: {name: string;value: number}[] = []
-  if (type==='Incomes'){
-    colors = income_colors;
-    data = Object.entries(
-      records.reduce((acc, record)=>{
-        const catName: string = record.category.name;
-        acc[catName] = (acc[catName] || 0) + record.sum;
-        return acc
-      }, {} as Record<string, number>
-      )
-    ).map(([name, value ])=> ({name, value}))
-  }else{
-    colors = outcome_colors;
-    data = Object.entries(
-      records.reduce((acc, record)=>{
-        const catName: string = record.category.priority;
-        acc[catName] = (acc[catName] || 0) + record.sum;
-        return acc
-      }, {} as Record<string, number>
-      )
-    ).map(([name, value ])=> ({name, value}))
-  }
-  if (data.length === 0) return null;
-  return(
-    <div className='chart-container'>
-      <ResponsiveContainer>
-        <PieChart>
-          <Pie 
-            data = {data}
-            cx='50%'
-            cy='50%'
-            innerRadius={0}
-            outerRadius={170}
-            paddingAngle={0}
-            dataKey='value'>
-            {data.map((_, index: number)=> <Cell key={`cell-${index}`} fill={colors[index % colors.length]}/>)}
-          </Pie>
-          <Tooltip contentStyle={{borderRadius: '10px', border: 'none'}}/>
-        </PieChart>
-      </ResponsiveContainer>
-    </div>
-  )
-}
-function App() {
 
+function App() {
   
   const [outcomes, setOutcomes] = useState<IRecord[]>([])
   const [incomes, setIncomes] = useState<IRecord[]>([])
@@ -230,7 +184,7 @@ function App() {
 
   const[openForm, setOpenForm] = useState({
     openIncomeForm: false,
-    openOutcomeForm: false
+    openOutcomeForm: true
   })
   function deleteRecord(id: number, priority: priority):void{
     if (priority ==='income'){
@@ -273,8 +227,8 @@ function Balance({formStatus, setFormStatus, addIncome, addOutcome, balance}: Ba
         <p className='balance-sum'>{balance}$</p>
       </div>
       <div className='inline'>
-        <button onClick={()=>setFormStatus({openIncomeForm: true, openOutcomeForm: false})}>Income</button>
-        <button onClick={()=>setFormStatus({openIncomeForm: false, openOutcomeForm: true})}>Outcome</button>
+        <button onClick={()=>setFormStatus({openIncomeForm: true, openOutcomeForm: false})}>Add income</button>
+        <button onClick={()=>setFormStatus({openIncomeForm: false, openOutcomeForm: true})}>Add outcome</button>
       </div>
       {(formStatus.openIncomeForm || formStatus.openOutcomeForm)&& <Form formStatus={formStatus} setFormStatus={setFormStatus} addIncome={addIncome} addOutcome={addOutcome}/>}
     </div>
@@ -393,5 +347,49 @@ function List({type, records, deleteRecord, copyRecord, toogleSortOrder, sortOrd
   )
 }
 
-
+function Chart({records, type}: ChartProps){
+  let colors: string[] =[];
+  let data: {name: string;value: number}[] = []
+  if (type==='Incomes'){
+    colors = income_colors;
+    data = Object.entries(
+      records.reduce((acc, record)=>{
+        const catName: string = record.category.name;
+        acc[catName] = (acc[catName] || 0) + record.sum;
+        return acc
+      }, {} as Record<string, number>
+      )
+    ).map(([name, value ])=> ({name, value}))
+  }else{
+    colors = outcome_colors;
+    data = Object.entries(
+      records.reduce((acc, record)=>{
+        const catName: string = record.category.priority;
+        acc[catName] = (acc[catName] || 0) + record.sum;
+        return acc
+      }, {} as Record<string, number>
+      )
+    ).map(([name, value ])=> ({name, value}))
+  }
+  if (data.length === 0) return null;
+  return(
+    <div className='chart-container'>
+      <ResponsiveContainer width='100%' height='100%'>
+        <PieChart>
+          <Pie 
+            data = {data}
+            cx='50%'
+            cy='50%'
+            innerRadius={0}
+            
+            paddingAngle={0}
+            dataKey='value'>
+            {data.map((_, index: number)=> <Cell key={`cell-${index}`} fill={colors[index % colors.length]}/>)}
+          </Pie>
+          <Tooltip contentStyle={{borderRadius: '10px', border: 'none'}}/>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
 export default App

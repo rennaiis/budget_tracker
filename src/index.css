@@ -42,10 +42,7 @@ body{
 }
 h1{
   font-family: 'Montserrat', sans-serif;
-  font-size: clamp(2rem, 2rem+0.2wv, 4rem);
-}
-h2{
-  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1rem, 4vw, 1.5rem);
 }
 li{
   list-style: none;
@@ -181,7 +178,7 @@ input[type="radio"]:checked + .category p {
 
 .chart-container{
   flex: 1 1 300px;
-  min-width: 300px;
+  min-width: 200px;
   max-width: 500px;
   width: 100%;
   aspect-ratio: 1/1;
@@ -208,12 +205,12 @@ input[type="radio"]:checked + .category p {
 .list-item-buttons{
   display: flex;
   gap: 10px;
+  flex-direction: column;
 }
-.list-item-buttons span{
+.list-item-buttons button{
   font-weight: 700;
-}
-.list-item-buttons span:hover{
-  color: var(--back-4)
+  background: none;
+  
 }
 @media(min-width:850px){
   .list-items{
@@ -229,5 +226,17 @@ input[type="radio"]:checked + .category p {
   .category p{
     font-weight: 300;
     font-size: 10px;
+  }
+  p{
+    font-weight: 300;
+    font-size: 16px;
+  }
+  h3{
+    font-size: smaller;
+  }
+}
+@media(max-width: 339px){
+  .list-item{
+    gap: 5px
   }
 }
