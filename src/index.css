@@ -36,7 +36,7 @@ html{
 }
 body{
   width: 100%;
-  max-width: 500px;
+  max-width: 900px;
   flex-shrink: 0;
   font-size: 20px;
 }
@@ -93,7 +93,6 @@ button:hover{
   display: flex;
   gap: 1rem;
 }
-
 .form{
   display: flex;
   flex-direction: column;
@@ -180,7 +179,28 @@ input[type="radio"]:checked + .category p {
 }
 
 
+.chart-container{
+  flex: 1 1 300px;
+  min-width: 300px;
+  max-width: 500px;
+  width: 100%;
+  aspect-ratio: 1/1;
+}
+.chart-container:not(:has(div)){
+  display: none;
+}
+.list-and-chart{
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+  display:  flex;
+  
+}
+
 .list-items{
+  width: 100%;
+  flex: 1 1 400px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 5px
@@ -188,7 +208,6 @@ input[type="radio"]:checked + .category p {
 .list-item-buttons{
   display: flex;
   gap: 10px;
-  
 }
 .list-item-buttons span{
   font-weight: 700;
@@ -196,7 +215,11 @@ input[type="radio"]:checked + .category p {
 .list-item-buttons span:hover{
   color: var(--back-4)
 }
-
+@media(min-width:850px){
+  .list-items{
+    max-width: 500px;
+  }
+}
 @media (max-width: 497px) {
   .category-image{
     width:30px;

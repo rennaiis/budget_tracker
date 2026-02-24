@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
 
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip} from 'recharts';
+
+const income_colors = ['rgb(66, 137, 145)', 'rgb(28, 70, 75)', 'rgb(94, 221, 235)', 'rgb(42, 62, 65)', 'rgb(0, 130, 145)']
+const outcome_colors = ['rgb(134, 102, 175)', 'rgb(49, 104, 6)','rgb(77, 156, 230)']
+
 type priority = 'essentional'|'lifestyle'|'extra'|'income'
 type typeOfRecord = 'Incomes' | 'Outcomes'
 interface IRecord{
@@ -18,6 +23,11 @@ interface IformStatus {
   openIncomeForm: boolean;
   openOutcomeForm: boolean;
 }
+interface ChartProps{
+  records: IRecord[];
+  type: typeOfRecord;
+}
+
 interface CategoryProps{
   catObj: ICategory;
   selectCategory: (category: ICategory)=>void
@@ -134,6 +144,51 @@ const incomeCategories: ICategory[] = [
   }
 ]
 
+function Chart({records, type}: ChartProps){
+  let colors: string[] =[];
+  let data: {name: string;value: number}[] = []
+  if (type==='Incomes'){
+    colors = income_colors;
+    data = Object.entries(
+      records.reduce((acc, record)=>{
+        const catName: string = record.category.name;
+        acc[catName] = (acc[catName] || 0) + record.sum;
+        return acc
+      }, {} as Record<string, number>
+      )
+    ).map(([name, value ])=> ({name, value}))
+  }else{
+    colors = outcome_colors;
+    data = Object.entries(
+      records.reduce((acc, record)=>{
+        const catName: string = record.category.priority;
+        acc[catName] = (acc[catName] || 0) + record.sum;
+        return acc
+      }, {} as Record<string, number>
+      )
+    ).map(([name, value ])=> ({name, value}))
+  }
+  if (data.length === 0) return null;
+  return(
+    <div className='chart-container'>
+      <ResponsiveContainer>
+        <PieChart>
+          <Pie 
+            data = {data}
+            cx='50%'
+            cy='50%'
+            innerRadius={0}
+            outerRadius={170}
+            paddingAngle={0}
+            dataKey='value'>
+            {data.map((_, index: number)=> <Cell key={`cell-${index}`} fill={colors[index % colors.length]}/>)}
+          </Pie>
+          <Tooltip contentStyle={{borderRadius: '10px', border: 'none'}}/>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
 function App() {
 
   
@@ -326,11 +381,13 @@ function List({type, records, deleteRecord, copyRecord, toogleSortOrder, sortOrd
           onClick={()=>toogleSortOrder('priority')}>By category {(sortOrder==='asc')? '\u2191': '\u2193'}</button>
         </div>
         : ''}
+      <div className='list-and-chart'>
+        <ul className='list-items'>
+          {records.map(item => <ListItem ListItemObj={item} deleteRecord={deleteRecord} copyRecord={copyRecord}/>)}
+        </ul>
+        <Chart records={records} type={type}/>
+      </div>
       
-      <ul className='list-items'>
-        {records.map(item => <ListItem ListItemObj={item} deleteRecord={deleteRecord} copyRecord={copyRecord}/>)}
-      </ul>
-      <div className='diagramm'>Diagramm</div>
     </div>
     
   )
