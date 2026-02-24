@@ -7,6 +7,7 @@ interface IRecord{
   sum: number;
   note: string;
   category: ICategory;
+  id: number
 }
 interface ICategory{
   image: string;
@@ -36,10 +37,14 @@ interface BalanceProps{
 }
 interface ListProps{
   type: typeOfRecord;
-  records: IRecord[]
+  records: IRecord[];
+  deleteRecord: (id: number, priority: priority)=>void;
+  copyRecord: (record: IRecord, priority: priority)=>void
 }
 interface ListItemProps{
-  ListItemObj: IRecord
+  ListItemObj: IRecord;
+  deleteRecord:  (id: number, priority: priority)=>void;
+  copyRecord: (record: IRecord, priority: priority)=>void
 }
 const outcomeCategories: ICategory[] = [
   { image: 'bills.png',
@@ -134,7 +139,24 @@ function App() {
     openIncomeForm: false,
     openOutcomeForm: false
   })
-  
+  function deleteRecord(id: number, priority: priority):void{
+    if (priority ==='income'){
+      setIncomes(incomes.filter(item => item.id != id))
+      
+    }else{
+      setOutcomes(outcomes.filter(item => item.id != id))
+    }    
+    refreshBalance()
+  }
+  function copyRecord(record: IRecord, priority: priority){
+    const copied = {...record, id: Date.now()}
+    if (priority ==='income'){
+      setIncomes([...incomes, copied])
+    }else{
+      setOutcomes([...outcomes, copied])
+    }    
+    refreshBalance()
+  }
   function refreshBalance(){
     const allIncome: number = incomes.reduce((acc, item)=> acc+item.sum, 0)
     const allOutcome: number = outcomes.reduce((acc, item)=>acc+item.sum, 0)
@@ -153,8 +175,8 @@ function App() {
     <>
       <h1>My budget</h1>
       <Balance formStatus={openForm} setFormStatus={setOpenForm} addIncome={addIncome} addOutcome={addOutcome} balance={balance}/>
-      <List type='Outcomes' records={outcomes}/>
-      <List type='Incomes' records={incomes}/>
+      <List type='Outcomes' records={outcomes} deleteRecord={deleteRecord} copyRecord={copyRecord}/>
+      <List type='Incomes' records={incomes} deleteRecord={deleteRecord} copyRecord={copyRecord}/>
     </>
   )
 }
@@ -185,7 +207,7 @@ function Form({formStatus, setFormStatus, addIncome, addOutcome}: FormManagement
   function handleSubmit(e: React.SubmitEvent){
     e.preventDefault();
     const dateObj: Date = new Date(date)
-    const rec: IRecord = {date: dateObj, category: category, note: note, sum: sum}
+    const rec: IRecord = {date: dateObj, category: category, note: note, sum: sum, id: Date.now()}
     if (rec.category.priority == 'income'){
       addIncome(rec)
       setNote('')
@@ -247,7 +269,7 @@ function CategoryButton({catObj, selectCategory}: CategoryProps){
     </li>
   )
 }
-function ListItem({ListItemObj}: ListItemProps){
+function ListItem({ListItemObj, deleteRecord, copyRecord}: ListItemProps){
   return(
     <li className={`list-item ${ListItemObj.category.priority}`}>
       <img className="category-image" src={ListItemObj.category.image} alt="category" />
@@ -257,13 +279,13 @@ function ListItem({ListItemObj}: ListItemProps){
       </div>
       <h3>{ListItemObj.sum}$</h3>
       <div className='list-item-buttons'>
-        <span>{"\u29c9"}</span>
-        <span>{'\u2716'}</span>
+        <button onClick={()=>copyRecord(ListItemObj, ListItemObj.category.priority)}>{"\u29c9"}</button>
+        <button onClick={()=>deleteRecord(ListItemObj.id, ListItemObj.category.priority)}>{'\u2716'}</button>
       </div>
     </li>
   )
 }
-function List({type, records}: ListProps){
+function List({type, records, deleteRecord, copyRecord}: ListProps){
   return(
     <div className='container'>
       <h3>{type}</h3>
@@ -272,7 +294,7 @@ function List({type, records}: ListProps){
         <button>By category</button>
       </div>
       <ul className='list-items'>
-        {records.map(item => <ListItem ListItemObj={item}/>)}
+        {records.map(item => <ListItem ListItemObj={item} deleteRecord={deleteRecord} copyRecord={copyRecord}/>)}
       </ul>
       <div className='diagramm'>Diagramm</div>
     </div>
