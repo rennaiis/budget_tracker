@@ -17,6 +17,10 @@ html{
   --back-3: rgba(29, 21, 58, 0.353);
   --back-4: rgb(40, 40, 45);
   --main-text: rgba(255, 255, 255, 0.687);
+  --extra: rgba(134, 102, 175, 0.459);
+  --essentional: rgba(49, 104, 6, 0.445);
+  --income: rgba(66, 137, 145, 0.452);
+  --lifestyle: rgba(77, 156, 230, 0.438);
   background: radial-gradient(circle at 15% 99%, var(--back-1) 0%, var(--back-2) 80%), #282828;
   color-scheme: light dark;
   font-family: 'Source Sans 3';
@@ -156,6 +160,21 @@ input[type="radio"]:checked + .category p {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+  padding: 8px;
+  border-radius: 5px
+}
+
+.extra{
+  background-color: var(--extra)
+}
+.income{
+  background-color: var(--income)
+}
+.lifestyle{
+  background-color: var(--lifestyle)
+}
+.essentional{
+  background-color: var(--essentional)
 }
 
 .list-items{

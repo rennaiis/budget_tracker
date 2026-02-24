@@ -6,7 +6,7 @@ interface IRecord{
   date: Date;
   sum: number;
   note: string;
-  category: ICategory
+  category: ICategory;
 }
 interface ICategory{
   image: string;
@@ -249,7 +249,7 @@ function CategoryButton({catObj, selectCategory}: CategoryProps){
 }
 function ListItem({ListItemObj}: ListItemProps){
   return(
-    <li className='list-item'>
+    <li className={`list-item ${ListItemObj.category.priority}`}>
       <img className="category-image" src={ListItemObj.category.image} alt="category" />
       <div>
         <h6 className="note">{ListItemObj.note}</h6>
