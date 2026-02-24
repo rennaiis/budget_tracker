@@ -132,9 +132,14 @@ const incomeCategories: ICategory[] = [
 ]
 
 function App() {
-  const[balance, setBalance]=useState(0)
+
   const [outcomes, setOutcomes] = useState<IRecord[]>([])
   const [incomes, setIncomes] = useState<IRecord[]>([])
+
+  const allIncome: number = incomes.reduce((acc, item)=> acc+Number(item.sum), 0)
+  const allOutcome: number = outcomes.reduce((acc, item)=>acc+Number(item.sum), 0)
+  const balance: number = allIncome - allOutcome
+
   const[openForm, setOpenForm] = useState({
     openIncomeForm: false,
     openOutcomeForm: false
@@ -146,7 +151,6 @@ function App() {
     }else{
       setOutcomes(outcomes.filter(item => item.id != id))
     }    
-    refreshBalance()
   }
   function copyRecord(record: IRecord, priority: priority){
     const copied = {...record, id: Date.now()}
@@ -155,21 +159,13 @@ function App() {
     }else{
       setOutcomes([...outcomes, copied])
     }    
-    refreshBalance()
-  }
-  function refreshBalance(){
-    const allIncome: number = incomes.reduce((acc, item)=> acc+item.sum, 0)
-    const allOutcome: number = outcomes.reduce((acc, item)=>acc+item.sum, 0)
-    setBalance(()=>(allIncome - allOutcome))
   }
   function addIncome(record: IRecord){
     setIncomes([...incomes, {...record}]);
-    refreshBalance()
     
   }
   function addOutcome(record: IRecord){
     setOutcomes([...outcomes, {...record}]);
-    refreshBalance()
   }
   return (
     <>
@@ -199,7 +195,7 @@ function Balance({formStatus, setFormStatus, addIncome, addOutcome, balance}: Ba
 
 function Form({formStatus, setFormStatus, addIncome, addOutcome}: FormManagementProps){
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
-  const [sum, setSum] = useState(0)
+  const [sum, setSum] = useState('')
   const[note, setNote] = useState('')
   const initionalCategory: ICategory = {image: '', name: '', priority: 'essentional'}
   const[category, setCategory] = useState(initionalCategory)
@@ -207,12 +203,12 @@ function Form({formStatus, setFormStatus, addIncome, addOutcome}: FormManagement
   function handleSubmit(e: React.SubmitEvent){
     e.preventDefault();
     const dateObj: Date = new Date(date)
-    const rec: IRecord = {date: dateObj, category: category, note: note, sum: sum, id: Date.now()}
+    const rec: IRecord = {date: dateObj, category: category, note: note, sum: Number(sum), id: Date.now()}
     if (rec.category.priority == 'income'){
       addIncome(rec)
       setNote('')
       setDate(new Date().toISOString().split('T')[0])
-      setSum(0)
+      setSum('')
     }else{
       addOutcome(rec)
     }
@@ -235,7 +231,7 @@ function Form({formStatus, setFormStatus, addIncome, addOutcome}: FormManagement
           <label htmlFor='form-sum'>Summ:</label>
           <input type='number' id='form-sum' required
           value={sum}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setSum(Number(e.target.value))}/>
+          onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setSum(String(e.target.value))}/>
         </div>
         <div>
           <label htmlFor='form-note'>Note:</label>
