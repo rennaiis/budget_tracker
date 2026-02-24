@@ -39,7 +39,10 @@ interface ListProps{
   type: typeOfRecord;
   records: IRecord[];
   deleteRecord: (id: number, priority: priority)=>void;
-  copyRecord: (record: IRecord, priority: priority)=>void
+  copyRecord: (record: IRecord, priority: priority)=>void;
+  toogleSortOrder: (type: string)=>void;
+  sortType: string;
+  sortOrder: string
 }
 interface ListItemProps{
   ListItemObj: IRecord;
@@ -133,12 +136,42 @@ const incomeCategories: ICategory[] = [
 
 function App() {
 
+  
   const [outcomes, setOutcomes] = useState<IRecord[]>([])
   const [incomes, setIncomes] = useState<IRecord[]>([])
 
   const allIncome: number = incomes.reduce((acc, item)=> acc+Number(item.sum), 0)
   const allOutcome: number = outcomes.reduce((acc, item)=>acc+Number(item.sum), 0)
   const balance: number = allIncome - allOutcome
+
+  const [sortType, setSortType] = useState('date') //priority
+  const [sortOrder, setSortOrder] = useState('asc') //dsc 
+
+  function toogleSortOrder(type: string){
+    if (sortType === type){
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+    }else{
+      setSortType(type)
+      setSortOrder('asc')
+    }
+  }
+
+  function sortRecords(records: IRecord[]){
+    return records.slice().sort((a: IRecord, b: IRecord )=>{
+      if (sortType === 'priority'){
+        const priorityOrder = {essentional: 1, lifestyle: 2, extra: 3, income: 4}
+        return sortOrder=='asc' ? 
+        priorityOrder[a.category.priority] - priorityOrder[b.category.priority]:
+        priorityOrder[b.category.priority] - priorityOrder[a.category.priority]
+      }else{
+        return sortOrder=='asc'?
+        a.id - b.id:
+        b.id - a.id
+      }
+    } )
+  }
+  const sordedIncomes = sortRecords(incomes)
+  const sordedOutcomes = sortRecords(outcomes)
 
   const[openForm, setOpenForm] = useState({
     openIncomeForm: false,
@@ -171,8 +204,8 @@ function App() {
     <>
       <h1>My budget</h1>
       <Balance formStatus={openForm} setFormStatus={setOpenForm} addIncome={addIncome} addOutcome={addOutcome} balance={balance}/>
-      <List type='Outcomes' records={outcomes} deleteRecord={deleteRecord} copyRecord={copyRecord}/>
-      <List type='Incomes' records={incomes} deleteRecord={deleteRecord} copyRecord={copyRecord}/>
+      <List type='Outcomes' records={sordedOutcomes} deleteRecord={deleteRecord} copyRecord={copyRecord} toogleSortOrder={toogleSortOrder} sortOrder={sortOrder} sortType={sortType}/>
+      <List type='Incomes' records={sordedIncomes} deleteRecord={deleteRecord} copyRecord={copyRecord} toogleSortOrder={toogleSortOrder} sortOrder={sortOrder} sortType={sortType}/>
     </>
   )
 }
@@ -235,7 +268,7 @@ function Form({formStatus, setFormStatus, addIncome, addOutcome}: FormManagement
         </div>
         <div>
           <label htmlFor='form-note'>Note:</label>
-          <input type="text" id='form-note' required
+          <input type="text" id='form-note' 
           onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setNote(e.target.value)}/>
         </div>
         <ul className='category-list'>
@@ -281,14 +314,19 @@ function ListItem({ListItemObj, deleteRecord, copyRecord}: ListItemProps){
     </li>
   )
 }
-function List({type, records, deleteRecord, copyRecord}: ListProps){
+function List({type, records, deleteRecord, copyRecord, toogleSortOrder, sortOrder, sortType}: ListProps){
   return(
     <div className='container'>
       <h3>{type}</h3>
-      <div className='inline'>
-        <button>By date</button>
-        <button>By category</button>
-      </div>
+      {type === 'Outcomes' ?
+        <div className='inline'>
+        <button className={sortType === 'date'? 'active':''}  
+          onClick={()=>toogleSortOrder('date')}>By date {(sortOrder==='asc')? '\u2191': '\u2193'}</button>
+          <button className={sortType === 'priority'? 'active':''} 
+          onClick={()=>toogleSortOrder('priority')}>By category {(sortOrder==='asc')? '\u2191': '\u2193'}</button>
+        </div>
+        : ''}
+      
       <ul className='list-items'>
         {records.map(item => <ListItem ListItemObj={item} deleteRecord={deleteRecord} copyRecord={copyRecord}/>)}
       </ul>

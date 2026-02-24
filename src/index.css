@@ -63,7 +63,9 @@ button{
 button:hover{
   background-color: var(--back-4)
 }
-
+.active{
+  background-color: var(--back-4)
+}
 .inline{
   display: flex;
   gap: 10px;
@@ -176,6 +178,7 @@ input[type="radio"]:checked + .category p {
 .essentional{
   background-color: var(--essentional)
 }
+
 
 .list-items{
   display: flex;
