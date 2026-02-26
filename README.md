@@ -1,4 +1,3 @@
-# React + TypeScript + Vite
 # Budget Tracker 
 учебное приложение, позволяющее следить за своими доходами и расходами. Есть визуализация через диаграммы. 
 [Посмотреть на Vercel](budget-tracker-rennaiis.vercel.app)
