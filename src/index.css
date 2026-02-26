@@ -18,7 +18,7 @@ html{
   --back-4: rgb(40, 40, 45);
   --main-text: rgba(255, 255, 255, 0.687);
   --extra: rgba(134, 102, 175, 0.459);
-  --essentional: rgba(49, 104, 6, 0.445);
+  --essentional: rgba(0, 94, 55, 0.445);
   --income: rgba(66, 137, 145, 0.452);
   --lifestyle: rgba(77, 156, 230, 0.438);
   background: radial-gradient(circle at 15% 99%, var(--back-1) 0%, var(--back-2) 80%), #282828;
