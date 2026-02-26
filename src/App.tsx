@@ -2,9 +2,18 @@ import React, { useState } from 'react'
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip} from 'recharts';
 
-const income_colors = ['rgb(66, 137, 145)', 'rgb(28, 70, 75)', 'rgb(94, 221, 235)', 'rgb(42, 62, 65)', 'rgb(0, 130, 145)']
-const outcome_colors = ['rgb(134, 102, 175)', 'rgb(49, 104, 6)','rgb(77, 156, 230)']
-
+const income_colors: ChartColors = {
+  'salary': 'rgb(66, 137, 145)',
+  'freelance': 'rgb(28, 70, 75)',
+  'scholarship': 'rgb(94, 221, 235)',
+  'business': 'rgb(94, 221, 235)',
+  'other': 'rgb(0, 130, 145)'
+}
+const outcome_colors: ChartColors = {
+  'essentional': 'rgb(0, 94, 55)',
+  'lifestyle': 'rgb(77, 156, 230)',
+  'extra': 'rgb(134, 102, 175)'
+}
 type priority = 'essentional'|'lifestyle'|'extra'|'income'
 type typeOfRecord = 'Incomes' | 'Outcomes'
 interface IRecord{
@@ -57,6 +66,9 @@ interface ListItemProps{
   ListItemObj: IRecord;
   deleteRecord:  (id: number, priority: priority)=>void;
   copyRecord: (record: IRecord, priority: priority)=>void
+}
+interface ChartColors{
+  [key: string]:string
 }
 const outcomeCategories: ICategory[] = [
   { image: 'bills.png',
@@ -348,7 +360,7 @@ function List({type, records, deleteRecord, copyRecord, toogleSortOrder, sortOrd
 }
 
 function Chart({records, type}: ChartProps){
-  let colors: string[] =[];
+  let colors: ChartColors = {}
   let data: {name: string;value: number}[] = []
   if (type==='Incomes'){
     colors = income_colors;
@@ -384,7 +396,7 @@ function Chart({records, type}: ChartProps){
             
             paddingAngle={0}
             dataKey='value'>
-            {data.map((_, index: number)=> <Cell key={`cell-${index}`} fill={colors[index % colors.length]}/>)}
+            {data.map((entry, index: number)=> <Cell key={`cell-${index}`} fill={colors[entry.name]}/>)}
           </Pie>
           <Tooltip contentStyle={{borderRadius: '10px', border: 'none'}}/>
         </PieChart>
