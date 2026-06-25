@@ -2,7 +2,7 @@
 учебное приложение, позволяющее следить за своими доходами и расходами. Есть визуализация через диаграммы. 
 [Посмотреть на Vercel](budget-tracker-rennaiis.vercel.app)
 
-Скриншоты: 
+## Скриншоты: 
 
 Форма добавления доходов/расходов (переключается по кнопочке - income/outcome)
 <img width="1300" height="749" alt="Screenshot 2026-06-25 102139" src="https://github.com/user-attachments/assets/675fc9e5-a111-42ac-8051-8b0a03a7607d" />
