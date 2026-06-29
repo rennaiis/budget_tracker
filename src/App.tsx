@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip} from 'recharts';
 
@@ -158,9 +158,26 @@ const incomeCategories: ICategory[] = [
 
 function App() {
   
-  const [outcomes, setOutcomes] = useState<IRecord[]>([])
-  const [incomes, setIncomes] = useState<IRecord[]>([])
-
+  const [outcomes, setOutcomes] = useState<IRecord[]>(()=> {
+    const rawData = localStorage.getItem('savedOutcomes');
+    return rawData ? JSON.parse(rawData).map((item: IRecord) => ({
+        ...item,
+        date: new Date(item.date)
+      }))
+    : []
+  })
+  const [incomes, setIncomes] = useState<IRecord[]>(()=>{
+    const rawData = localStorage.getItem('savedIncomes');
+    return rawData ? JSON.parse(rawData).map((item: IRecord) => ({
+        ...item,
+        date: new Date(item.date)
+      }))
+    : []
+  })
+  useEffect(()=>{
+    localStorage.setItem('savedOutcomes', JSON.stringify(outcomes))
+    localStorage.setItem('savedIncomes', JSON.stringify(incomes))
+  }, [incomes, outcomes])
   const allIncome: number = incomes.reduce((acc, item)=> acc+Number(item.sum), 0)
   const allOutcome: number = outcomes.reduce((acc, item)=>acc+Number(item.sum), 0)
   const balance: number = allIncome - allOutcome
